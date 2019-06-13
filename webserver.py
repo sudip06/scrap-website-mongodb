@@ -29,22 +29,30 @@ def get_request():
                "same level of national wealth'")
     else:
         query_str = []
-        for key, val in args.items():
-            regx = re.compile(val.strip("\"'"), re.IGNORECASE)
-            query_str.append({key.strip(): regx})
-        output = []
         try:
-            db = connection['theguardian']
-            collection = db['data']
-            for s in collection.find({'$and': query_str}):
-                output.append({'Title': s['Title'], 'Url': s['Url'],
-                               'Author': s['Author']})
-            return jsonify({'result': output})
-
+            for key, val in args.items():
+                regx = re.compile(val.strip("\"'"), re.IGNORECASE)
+                query_str.append({key.strip(): regx})
+                output = []
+            if key in ("Url", "Title", "Body", "Author"):            
+                db = connection['theguardian']
+                collection = db['data']
+                for s in collection.find({'$and': query_str}):
+               	    output.append({'Title': s['Title'], 'Url': s['Url'],
+                                   'Author': s['Author']})
+                return jsonify({'result': output})
+            else:
+                return ("Not a valid key to filter on<br><br>Usage: One can search "
+                "by 4 fields, namely Title, Author, Body and Url<br>"
+                "Example:"
+                "(a)request?Title='Uber'<br>"
+                "(b)request?Title='carbon levels'<br>"
+                "(c)request?Title='carbon levels'&Body='we would arrive at the "
+                "same level of national wealth")
+                
         except (pymongo.errors.OperationFailure,
-               pymongo.errors.ServerSelectionTimeoutError) as e:
+            pymongo.errors.ServerSelectionTimeoutError) as e:
             return(str(e))
-
 
 
 if __name__ == '__main__':

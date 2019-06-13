@@ -15,6 +15,7 @@ connection = pymongo.MongoClient(
     Parameters: None
     Usage: This function handles get requests at the end point request
 """
+@app.route('/', methods=['GET'])
 @app.route('/request', methods=['GET'])
 def get_request():
     global connection

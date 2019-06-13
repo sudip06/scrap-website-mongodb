@@ -14,7 +14,7 @@ BOT_NAME = 'theguardian'
 SPIDER_MODULES = ['theguardian.spiders']
 NEWSPIDER_MODULE = 'theguardian.spiders'
 
-LOG_LEVEL = 'INFO'
+LOG_LEVEL = 'ERROR'
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'theguardian (+http://www.yourdomain.com)'
 

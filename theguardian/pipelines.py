@@ -20,15 +20,11 @@ class TheguardianPipeline(object):
 
     def process_item(self, item, spider):
         try:
-            # self.collection.update(dict(item),upsert=True)
-            self.collection.insert(dict(item), safe = True)
-            # log.msg("Question added to MongoDB database!",
-            #        level=log.DEBUG, spider=spider)
-        except errors.DuplicateKeyError:
-            pass
-        except (errors.OperationFailure,
-                errors.ServerSelectionTimeoutError) as e:
+            self.collection.insert(dict(item))
+        except (errors.ServerSelectionTimeoutError) as e:
             print(e)
             sys.exit(1)
+        except errors.DuplicateKeyError:
+            pass
 
         return item
